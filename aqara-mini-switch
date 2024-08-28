@@ -1,0 +1,132 @@
+blueprint:
+  name: Aqara Mini Switch With Multiple Triggers And Actions
+  description: This blueprint lets you add multiple triggers and actions from the Aqara Mini Switch to a single automation.
+  domain: automation
+  input:
+    sensor:
+      name: Aqara Mini Switch
+      description: The Aqara switch to use for triggering
+      selector:
+        device:
+          integration: mqtt
+    single_press_action:
+      name: Single Press Action
+      description: Action to perform on a single press of the button
+      selector:
+        action: {}
+      default: []
+    double_press_action:
+      name: Double Press Action
+      description: Action to perform on a double press of the button
+      selector:
+        action: {}
+      default: []
+    triple_press_action:
+      name: Triple Press Action
+      description: Action to perform on a triple press of the button
+      selector:
+        action: {}
+      default: []
+    quintuple_press_action:
+      name: Quintuple Press Action
+      description: Action to perform on a quintuple press of the button
+      selector:
+        action: {}
+      default: []
+    many_press_action:
+      name: Many Press Action
+      description: Action to perform on more than five presses of the button
+      selector:
+        action: {}
+      default: []
+    hold_action:
+      name: Hold Action
+      description: Action to perform when holding the button pressed
+      selector:
+        action: {}
+      default: []
+    release_action:
+      name: Release Action
+      description: Action to perform on release after holding the button pressed
+      selector:
+        action: {}
+      default: []
+
+trigger:
+  - platform: device
+    domain: mqtt
+    device_id: !input sensor
+    type: action
+    subtype: single
+    id: single
+  - platform: device
+    domain: mqtt
+    device_id: !input sensor
+    type: action
+    subtype: double
+    id: double
+  - platform: device
+    domain: mqtt
+    device_id: !input sensor
+    type: action
+    subtype: triple
+    id: triple
+  - platform: device
+    domain: mqtt
+    device_id: !input sensor
+    type: action
+    subtype: quintuple
+    id: quintuple
+  - platform: device
+    domain: mqtt
+    device_id: !input sensor
+    type: action
+    subtype: many
+    id: many
+  - platform: device
+    domain: mqtt
+    device_id: !input sensor
+    type: action
+    subtype: hold
+    id: hold
+  - platform: device
+    domain: mqtt
+    device_id: !input sensor
+    type: action
+    subtype: release
+    id: release
+
+condition: []
+
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: single
+        sequence: !input single_press_action
+      - conditions:
+          - condition: trigger
+            id: double
+        sequence: !input double_press_action
+      - conditions:
+          - condition: trigger
+            id: triple
+        sequence: !input triple_press_action
+      - conditions:
+          - condition: trigger
+            id: quintuple
+        sequence: !input quintuple_press_action
+      - conditions:
+          - condition: trigger
+            id: many
+        sequence: !input many_press_action
+      - conditions:
+          - condition: trigger
+            id: hold
+        sequence: !input hold_action
+      - conditions:
+          - condition: trigger
+            id: release
+        sequence: !input release_action
+
+mode: single
